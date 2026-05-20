@@ -1,5 +1,5 @@
 import regex as re
-from foundation import Tokenizer, merge, get_freqs
+from .foundation import Tokenizer, merge, get_freqs
 
 """
 This is the byte-level Byte Pair Encoding tokenizer.
