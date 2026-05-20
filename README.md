@@ -1,2 +1,2 @@
 # TuesdayTokenizer
-The Tuesday BPE Tokenizer
+A fast and easy to use BPE Tokenizer
