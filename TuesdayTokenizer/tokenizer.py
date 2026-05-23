@@ -40,7 +40,7 @@ class TuesdayTokenizer(Tokenizer):
             # for each chunk id in chunk ids, create a lookup table (dict) of pair frequencies
             for chunk_ids in ids:
                 get_freqs(chunk_ids, freqs)
-
+            
             # find the bigram (pair) with the highest frequency
             bigram = max(freqs, key=freqs.get)
 
@@ -53,10 +53,13 @@ class TuesdayTokenizer(Tokenizer):
             vocab[idx] = vocab[bigram[0]] + vocab[bigram[1]]
 
             if verbose:
-                print(f"Merge {i+1}/{num_merges}: {bigram} -> {idx} ({vocab[idx]}) had {freqs[bigram]} occurrences")
+                print(f"Merge {i+1}/{num_merges}: {bigram} -> {idx} || ({vocab[idx]}) appeared {freqs[bigram]} times")
     
         self.merges = merges
         self.vocab = vocab
+
+        # Save merges.json
+        self.save("TuesTok_v1")
 
     def _encode_chunk(self, text_bytes):
         ids = list(text_bytes)
@@ -95,4 +98,4 @@ class TuesdayTokenizer(Tokenizer):
             
         text_bytes = b"".join(part_bytes)
         text = text_bytes.decode("utf-8", errors="replace")
-        return text        
+        return text

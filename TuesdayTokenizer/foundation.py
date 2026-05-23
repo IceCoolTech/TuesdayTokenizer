@@ -1,4 +1,4 @@
-
+import json
 # --------------------------------------------------------------------
 # Helper functions used in the Tokenizer
 
@@ -7,7 +7,7 @@ def get_freqs(ids, counts=None):
     Given a list of integers, return a dictionary of counts of consecutive pairsxs
     Allows to update an existing dictionary of counts (optional)
     """
-    counts = {} if not None else counts
+    counts = {} if None else counts
 
     for pair in zip(ids, ids[1:]):
         counts[pair] = counts.get(pair, 0) + 1
@@ -63,3 +63,23 @@ class Tokenizer:
             vocab[idx] = vocab[p0] + vocab[p1]
         return vocab
     
+    def save(self, path_prefix):
+        merges_list = sorted(self.merges.items(), key=lambda x: x[1])
+        merges_out = [
+            [a,b] for (a, b), _ in merges_list
+        ]    
+
+        with open(f"{path_prefix}_merges.json", "w", encoding="utf-8") as f:
+            json.dump(merges_out, f)
+
+    def load(self, path_prefix):
+        with open(f"{path_prefix}_merges.json", "r", encoding="utf-8") as f:
+            merges_list = json.load(f)
+
+        self.merges = {
+            tuple(pair): idx
+            for idx, pair in enumerate(merges_list)
+        }
+
+        self.vocab = self._build_vocab()
+        
